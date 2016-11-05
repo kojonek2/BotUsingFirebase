@@ -11,4 +11,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="kojonek2.adamzmuda.firebasetest.MainActivity">
 
+    <TextView
+        android:text="Information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/informationText"
+        android:textSize="16sp"
+        android:textAlignment="center"/>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/informationText"
+        android:id="@+id/webView"/>
+
+    <Button
+        android:text="Confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/webView"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/confirmButton"/>
 </RelativeLayout>
