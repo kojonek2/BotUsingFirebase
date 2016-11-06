@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         webView.loadUrl("http://nauczyciel.edu.pl/user.php?page=pytania_online&arg=1115");
     }
 
-    private int checkForAnswer() {
+    private void checkForAnswer() {
         webView.evaluateJavascript(new Jquery().getJqueryCode(), null);
         webView.evaluateJavascript("$(\"p\").text()", new ValueCallback<String>() {
             @Override
@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
                             selectAnswer(answer);
                         } else {
                             //doesn't know answer
+
+                            requestAnswerFromUser();
                         }
                     }
 
@@ -93,12 +95,46 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        return 0;
     }
 
-    private void selectAnswer(String answerPassed) {
+    private void requestAnswerFromUser() {
 
+    }
+
+    private void selectAnswer(final String answerPassed) {
+        webView.evaluateJavascript("$(\"td\").eq(1).text()", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                value = value.substring(18, value.length() - 5);
+                if(value.equals(answerPassed)) {
+                    webView.evaluateJavascript("$(\"input\").get(4).click(); $(\"input\").get(10).click();", null);
+                }
+            }
+        });
+        webView.evaluateJavascript("$(\"td\").eq(3).text()", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                if(value.equals(answerPassed)) {
+                    webView.evaluateJavascript("$(\"input\").get(5).click(); $(\"input\").get(10).click();", null);
+                }
+            }
+        });
+        webView.evaluateJavascript("$(\"td\").eq(5).text()", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                if(value.equals(answerPassed)) {
+                    webView.evaluateJavascript("$(\"input\").get(6).click(); $(\"input\").get(10).click();", null);
+                }
+            }
+        });
+        webView.evaluateJavascript("$(\"td\").eq(7).text()", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                if(value.equals(answerPassed)) {
+                    webView.evaluateJavascript("$(\"input\").get(7).click(); $(\"input\").get(10).click();", null);
+                }
+            }
+        });
     }
 
     public void onConfirmBtnClicked(View view) {
