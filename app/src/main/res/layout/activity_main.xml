@@ -34,5 +34,5 @@
         android:layout_below="@+id/webView"
         android:layout_centerHorizontal="true"
         android:onClick="onConfirmBtnClicked"
-        android:text="Confirm"/>
+        android:text="Potwierdź"/>
 </RelativeLayout>
