@@ -3,4 +3,6 @@
     <string name="please_login">Proszę wpisać dane logowania i wcisnąć guzik zaloguj</string>
     <string name="give_answer">Ustaw odpowiedż i wciśnij przycisk Potwierdź</string>
     <string name="information">Informacje</string>
+    <string name="confirm">Potwierdź</string>
+    <string name="information_button">Information</string>
 </resources>

@@ -3,6 +3,7 @@ package kojonek2.adamzmuda.firebasetest.activity;
 import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             temporaryQuestion = savedInstanceState.getString(STATE_TEMPORARY_QUESTION);
         }
 
-
+        confirmBtn.setVisibility(View.GONE);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (url) {
                     case "http://nauczyciel.edu.pl/login.php":
                         informationText.setText(R.string.please_login);
+                        allowClicking(true);
                         if(checkCorrectOfAnswer) {
                             //given answer is incorrect
                             checkCorrectOfAnswer = false;
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                             temporaryQuestion = null;
                             temporaryAnswer = null;
                             checkCorrectOfAnswer = false;
+                            allowClicking(false);
                         }
                         checkForAnswer();
                         break;
@@ -125,14 +128,14 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"p\").text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                question = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                question = value.replaceAll("[\\.$#\\[\\]]", "");
                 questionReference = myReference.child(question);
                 questionReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
                             //knows answer
-                            answer = dataSnapshot.getValue().toString().replaceAll("/[\\.$#\\[\\]]/g", "");
+                            answer = dataSnapshot.getValue().toString();
                             selectAnswer(answer);
                         } else {
                             //doesn't know answer
@@ -151,13 +154,17 @@ public class MainActivity extends AppCompatActivity {
     private void requestAnswerFromUser() {
         informationText.setText(R.string.give_answer);
         requestingAnswer = true;
+        confirmBtn.setVisibility(View.VISIBLE);
+        webView.evaluateJavascript("$(\"input\").eq(10).hide()", null);
+        allowClicking(true);
+
     }
 
     private void selectAnswer(final String answerPassed) {
         webView.evaluateJavascript("$(\"td\").eq(1).text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                if(value.replaceAll("/[\\.$#\\[\\]]/g", "").equals(answerPassed)) {
+                if(value.equals(answerPassed)) {
                     webView.evaluateJavascript("$(\"input\").get(4).click(); $(\"input\").get(10).click();", null);
                 }
             }
@@ -165,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"td\").eq(3).text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                if(value.replaceAll("/[\\.$#\\[\\]]/g", "").equals(answerPassed)) {
+                if(value.equals(answerPassed)) {
                     webView.evaluateJavascript("$(\"input\").get(5).click(); $(\"input\").get(10).click();", null);
                 }
             }
@@ -173,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"td\").eq(5).text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                if(value.replaceAll("/[\\.$#\\[\\]]/g", "").equals(answerPassed)) {
+                if(value.equals(answerPassed)) {
                     webView.evaluateJavascript("$(\"input\").get(6).click(); $(\"input\").get(10).click();", null);
                 }
             }
@@ -181,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"td\").eq(7).text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                if(value.replaceAll("/[\\.$#\\[\\]]/g", "").equals(answerPassed)) {
+                if(value.equals(answerPassed)) {
                     webView.evaluateJavascript("$(\"input\").get(7).click(); $(\"input\").get(10).click();", null);
                 }
             }
@@ -194,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             webView.evaluateJavascript("$(\"p\").text()", new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String value) {
-                    temporaryQuestion = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                    temporaryQuestion = value.replaceAll("[\\.$#\\[\\]]", "");
                 }
             });
 
@@ -206,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                         webView.evaluateJavascript("$(\"td\").eq(1).text()", new ValueCallback<String>() {
                             @Override
                             public void onReceiveValue(String value) {
-                                temporaryAnswer = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                                temporaryAnswer = value;
                             }
                         });
                     }
@@ -220,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                         webView.evaluateJavascript("$(\"td\").eq(3).text()", new ValueCallback<String>() {
                             @Override
                             public void onReceiveValue(String value) {
-                                temporaryAnswer = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                                temporaryAnswer = value;
                             }
                         });
                     }
@@ -234,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                         webView.evaluateJavascript("$(\"td\").eq(5).text()", new ValueCallback<String>() {
                             @Override
                             public void onReceiveValue(String value) {
-                                temporaryAnswer = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                                temporaryAnswer = value;
                             }
                         });
                     }
@@ -248,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                         webView.evaluateJavascript("$(\"td\").eq(7).text()", new ValueCallback<String>() {
                             @Override
                             public void onReceiveValue(String value) {
-                                temporaryAnswer = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                                temporaryAnswer = value;
                             }
                         });
                     }
@@ -257,6 +264,16 @@ public class MainActivity extends AppCompatActivity {
             requestingAnswer = false;
             checkCorrectOfAnswer = true;
             webView.evaluateJavascript("$(\"input\").get(10).click();", null);
+            confirmBtn.setVisibility(View.GONE);
         }
+    }
+
+    private void allowClicking(final boolean b) {
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return !b;
+            }
+        });
     }
 }

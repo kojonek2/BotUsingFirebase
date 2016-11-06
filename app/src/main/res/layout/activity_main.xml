@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="kojonek2.adamzmuda.firebasetest.activity.MainActivity">
+    tools:context="kojonek2.adamzmuda.firebasetest.activity.MainActivity"
+    >
 
     <TextView
         android:id="@+id/informationText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Information"
+        android:text="@string/information_button"
         android:textAlignment="center"
         android:textSize="16sp"/>
 
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_below="@+id/informationText"
-        android:layout_centerHorizontal="true"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/webView"
-        android:layout_centerHorizontal="true"
         android:onClick="onConfirmBtnClicked"
-        android:text="Potwierdź"/>
-</RelativeLayout>
+        android:text="@string/confirm"
+        android:visibility="visible"
+        android:elevation="0dp"/>
+</LinearLayout>
