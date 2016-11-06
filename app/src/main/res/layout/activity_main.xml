@@ -12,26 +12,27 @@
     tools:context="kojonek2.adamzmuda.firebasetest.MainActivity">
 
     <TextView
-        android:text="Information"
+        android:id="@+id/informationText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:id="@+id/informationText"
-        android:textSize="16sp"
-        android:textAlignment="center"/>
+        android:text="Information"
+        android:textAlignment="center"
+        android:textSize="16sp"/>
 
     <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/informationText"
-        android:id="@+id/webView"/>
+        android:layout_centerHorizontal="true"/>
 
     <Button
-        android:text="Confirm"
+        android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/webView"
         android:layout_centerHorizontal="true"
-        android:id="@+id/confirmButton"/>
+        android:onClick="onConfirmBtnClicked"
+        android:text="Confirm"/>
 </RelativeLayout>
