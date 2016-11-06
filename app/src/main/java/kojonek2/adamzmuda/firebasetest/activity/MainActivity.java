@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     static final String STATE_REQUESTING_ANSWER = "requestingAnswer";
     static final String STATE_CHECK_CORRECT_OF_ANSWER = "checkCorrectOfAnswer";
+    static final String STATE_TEMPORARY_ANSWER = "temporaryAnswer";
+    static final String STATE_TEMPORARY_QUESTION = "temporaryQuestion";
 
 
     TextView informationText;
@@ -32,12 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
     String question;
     String answer;
+    String temporaryAnswer;
+    String temporaryQuestion;
 
     Boolean requestingAnswer;
     Boolean checkCorrectOfAnswer;
 
     DatabaseReference myReference;
     DatabaseReference questionReference;
+
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -51,9 +56,13 @@ public class MainActivity extends AppCompatActivity {
 
         myReference = FirebaseDatabase.getInstance().getReference().child("Question");
 
-
+        //////// reading data from saved instance or setting default one
         requestingAnswer = savedInstanceState != null && savedInstanceState.getBoolean(STATE_REQUESTING_ANSWER);
         checkCorrectOfAnswer = savedInstanceState != null && savedInstanceState.getBoolean(STATE_CHECK_CORRECT_OF_ANSWER);
+        if(savedInstanceState != null) {
+            temporaryAnswer = savedInstanceState.getString(STATE_TEMPORARY_ANSWER);
+            temporaryQuestion = savedInstanceState.getString(STATE_TEMPORARY_QUESTION);
+        }
 
 
         webView.setWebViewClient(new WebViewClient() {
@@ -61,15 +70,35 @@ public class MainActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 switch (url) {
-                    //TODO: Dodać co ma zrobic jesli odpowiedz jest poprawna lub niepoprawna.
                     case "http://nauczyciel.edu.pl/login.php":
                         informationText.setText(R.string.please_login);
+                        if(checkCorrectOfAnswer) {
+                            //given answer is incorrect
+                            checkCorrectOfAnswer = false;
+                            temporaryAnswer = null;
+                            temporaryQuestion = null;
+                        }
                         break;
                     case "http://nauczyciel.edu.pl/user.php?page=pytania_online&arg=1115":
                         informationText.setText(R.string.information);
+                        if(checkCorrectOfAnswer) {
+                            //given answer is correct
+                            questionReference = myReference.child(temporaryQuestion);
+                            questionReference.setValue(temporaryAnswer);
+
+                            temporaryQuestion = null;
+                            temporaryAnswer = null;
+                            checkCorrectOfAnswer = false;
+                        }
                         checkForAnswer();
                         break;
                     default:
+                        if(checkCorrectOfAnswer) {
+                            //given answer is incorrect
+                            temporaryAnswer = null;
+                            temporaryQuestion = null;
+                            checkCorrectOfAnswer = false;
+                        }
                         webView.loadUrl("http://nauczyciel.edu.pl/user.php?page=pytania_online&arg=1115");
                         break;
 
@@ -87,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
         outState.putBoolean(STATE_REQUESTING_ANSWER, requestingAnswer);
         outState.putBoolean(STATE_CHECK_CORRECT_OF_ANSWER, checkCorrectOfAnswer);
+        outState.putString(STATE_TEMPORARY_ANSWER, temporaryAnswer);
+        outState.putString(STATE_TEMPORARY_QUESTION, temporaryQuestion);
     }
 
     private void checkForAnswer() {
@@ -94,14 +125,14 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"p\").text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                question = value;
+                question = value.replaceAll("/[\\.$#\\[\\]]/g", "");
                 questionReference = myReference.child(question);
                 questionReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
                             //knows answer
-                            answer = dataSnapshot.getValue().toString();
+                            answer = dataSnapshot.getValue().toString().replaceAll("/[\\.$#\\[\\]]/g", "");
                             selectAnswer(answer);
                         } else {
                             //doesn't know answer
@@ -111,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) { }
-
                 });
 
             }
@@ -127,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"td\").eq(1).text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                if(value.equals(answerPassed)) {
+                if(value.replaceAll("/[\\.$#\\[\\]]/g", "").equals(answerPassed)) {
                     webView.evaluateJavascript("$(\"input\").get(4).click(); $(\"input\").get(10).click();", null);
                 }
             }
@@ -135,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"td\").eq(3).text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                if(value.equals(answerPassed)) {
+                if(value.replaceAll("/[\\.$#\\[\\]]/g", "").equals(answerPassed)) {
                     webView.evaluateJavascript("$(\"input\").get(5).click(); $(\"input\").get(10).click();", null);
                 }
             }
@@ -143,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"td\").eq(5).text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                if(value.equals(answerPassed)) {
+                if(value.replaceAll("/[\\.$#\\[\\]]/g", "").equals(answerPassed)) {
                     webView.evaluateJavascript("$(\"input\").get(6).click(); $(\"input\").get(10).click();", null);
                 }
             }
@@ -151,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         webView.evaluateJavascript("$(\"td\").eq(7).text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                if(value.equals(answerPassed)) {
+                if(value.replaceAll("/[\\.$#\\[\\]]/g", "").equals(answerPassed)) {
                     webView.evaluateJavascript("$(\"input\").get(7).click(); $(\"input\").get(10).click();", null);
                 }
             }
@@ -160,8 +190,73 @@ public class MainActivity extends AppCompatActivity {
 
     public void onConfirmBtnClicked(View view) {
         if(requestingAnswer) {
-            webView.evaluateJavascript("$(\"input\").get(10).click();", null);
+
+            webView.evaluateJavascript("$(\"p\").text()", new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    temporaryQuestion = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                }
+            });
+
+            webView.evaluateJavascript("$(\"input\").eq(4).prop(\"checked\")", new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    if (value.equals("true")) {
+
+                        webView.evaluateJavascript("$(\"td\").eq(1).text()", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                temporaryAnswer = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                            }
+                        });
+                    }
+                }
+            });
+            webView.evaluateJavascript("$(\"input\").eq(5).prop(\"checked\")", new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    if(value.equals("true")) {
+
+                        webView.evaluateJavascript("$(\"td\").eq(3).text()", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                temporaryAnswer = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                            }
+                        });
+                    }
+                }
+            });
+            webView.evaluateJavascript("$(\"input\").eq(6).prop(\"checked\")", new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    if(value.equals("true")) {
+
+                        webView.evaluateJavascript("$(\"td\").eq(5).text()", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                temporaryAnswer = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                            }
+                        });
+                    }
+                }
+            });
+            webView.evaluateJavascript("$(\"input\").eq(7).prop(\"checked\")", new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    if(value.equals("true")) {
+
+                        webView.evaluateJavascript("$(\"td\").eq(7).text()", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                temporaryAnswer = value.replaceAll("/[\\.$#\\[\\]]/g", "");
+                            }
+                        });
+                    }
+                }
+            });
+            requestingAnswer = false;
             checkCorrectOfAnswer = true;
+            webView.evaluateJavascript("$(\"input\").get(10).click();", null);
         }
     }
 }
