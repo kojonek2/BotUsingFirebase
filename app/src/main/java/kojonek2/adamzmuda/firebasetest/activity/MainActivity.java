@@ -67,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setTitle(getString(R.string.solving_questions));
         progressDialog.setMessage(getString(R.string.solved_count) + Integer.toString(solvedQuestions));
 
-        myReference = FirebaseDatabase.getInstance().getReference().child("QuestionTest");
+        myReference = FirebaseDatabase.getInstance().getReference().child("Question");
+
+
 
         //////// reading data from saved instance or setting default one
         requestingAnswer = savedInstanceState != null && savedInstanceState.getBoolean(STATE_REQUESTING_ANSWER);
