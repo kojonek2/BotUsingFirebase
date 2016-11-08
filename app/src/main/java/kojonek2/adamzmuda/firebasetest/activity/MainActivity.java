@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         confirmBtn.setVisibility(View.GONE);
         webView.setWebViewClient(new WebViewClient() {
             @Override
