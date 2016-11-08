@@ -5,4 +5,6 @@
     <string name="information">Informacje</string>
     <string name="confirm">Potwierdź</string>
     <string name="information_button">Information</string>
+    <string name="solving_questions">Rozwiązuje pytania</string>
+    <string name="solved_count">"Rozwiązano: "</string>
 </resources>
