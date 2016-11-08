@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
             solvedQuestions = 0;
         }
 
+
+
+
         confirmBtn.setVisibility(View.GONE);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -130,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 allowClicking(false);
             }
         });
-
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("http://nauczyciel.edu.pl/user.php?page=pytania_online&arg=1115");
     }
