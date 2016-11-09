@@ -2,6 +2,7 @@ package kojonek2.adamzmuda.firebasetest.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -67,8 +68,14 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.setTitle(getString(R.string.solving_questions));
         progressDialog.setMessage(getString(R.string.solved_count) + Integer.toString(solvedQuestions));
+        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.turn_off), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finishAndRemoveTask();
+            }
+        });
 
-        myReference = FirebaseDatabase.getInstance().getReference().child("Question");
+        myReference = FirebaseDatabase.getInstance().getReference().child("QuestionTest");
 
 
 

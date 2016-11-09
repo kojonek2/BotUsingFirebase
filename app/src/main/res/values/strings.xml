@@ -7,4 +7,5 @@
     <string name="information_button">Informacje</string>
     <string name="solving_questions">Rozwiązuje pytania</string>
     <string name="solved_count">"Rozwiązano: "</string>
+    <string name="turn_off">Wyłącz aplikację</string>
 </resources>
