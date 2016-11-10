@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        myReference = FirebaseDatabase.getInstance().getReference().child("QuestionTest");
+        myReference = FirebaseDatabase.getInstance().getReference().child("Question");
 
 
 
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkForAnswer() {
-        webView.evaluateJavascript(new Jquery().getJqueryCode(), null);
+        webView.evaluateJavascript(Jquery.getJqueryCode(), null);
         webView.evaluateJavascript("$(\"p\").text()", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
