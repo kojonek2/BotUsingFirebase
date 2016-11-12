@@ -168,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
                             //knows answer
+                            solvedQuestions++;
+                            progressDialog.setMessage(getString(R.string.solved_count) + Integer.toString(solvedQuestions));
                             progressDialog.show();
                             answer = dataSnapshot.getValue().toString();
                             selectAnswer(answer);
@@ -202,8 +204,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceiveValue(String value) {
                 if(value.equals(answerPassed)) {
-                    solvedQuestions++;
-                    progressDialog.setMessage(getString(R.string.solved_count) + Integer.toString(solvedQuestions));
                     webView.evaluateJavascript("$(\"input\").get(4).click(); $(\"input\").get(10).click();", null);
                 }
             }
