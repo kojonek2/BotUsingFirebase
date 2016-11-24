@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         informationText.setText(getString(R.string.give_answer));
         requestingAnswer = true;
         confirmBtn.setVisibility(View.VISIBLE);
-        webView.evaluateJavascript("$(\"input\").eq(10).hide()", null);
+        webView.evaluateJavascript("$(\"input\").eq(6).hide()", null);
         allowClicking(true);
 
     }
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceiveValue(String value) {
                 if(value.equals(answerPassed)) {
-                    webView.evaluateJavascript("$(\"input\").get(4).click(); $(\"input\").get(10).click();", null);
+                    webView.evaluateJavascript("$(\"input\").get(0).click(); $(\"input\").get(6).click();", null);
                 }
             }
         });
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceiveValue(String value) {
                 if(value.equals(answerPassed)) {
-                    webView.evaluateJavascript("$(\"input\").get(5).click(); $(\"input\").get(10).click();", null);
+                    webView.evaluateJavascript("$(\"input\").get(1).click(); $(\"input\").get(6).click();", null);
                 }
             }
         });
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceiveValue(String value) {
                 if(value.equals(answerPassed)) {
-                    webView.evaluateJavascript("$(\"input\").get(6).click(); $(\"input\").get(10).click();", null);
+                    webView.evaluateJavascript("$(\"input\").get(2).click(); $(\"input\").get(6).click();", null);
                 }
             }
         });
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceiveValue(String value) {
                 if(value.equals(answerPassed)) {
-                    webView.evaluateJavascript("$(\"input\").get(7).click(); $(\"input\").get(10).click();", null);
+                    webView.evaluateJavascript("$(\"input\").get(3).click(); $(\"input\").get(6).click();", null);
                 }
             }
         });
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            webView.evaluateJavascript("$(\"input\").eq(4).prop(\"checked\")", new ValueCallback<String>() {
+            webView.evaluateJavascript("$(\"input\").eq(0).prop(\"checked\")", new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String value) {
                     if (value.equals("true")) {
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            webView.evaluateJavascript("$(\"input\").eq(5).prop(\"checked\")", new ValueCallback<String>() {
+            webView.evaluateJavascript("$(\"input\").eq(1).prop(\"checked\")", new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String value) {
                     if(value.equals("true")) {
@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            webView.evaluateJavascript("$(\"input\").eq(6).prop(\"checked\")", new ValueCallback<String>() {
+            webView.evaluateJavascript("$(\"input\").eq(2).prop(\"checked\")", new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String value) {
                     if(value.equals("true")) {
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            webView.evaluateJavascript("$(\"input\").eq(7).prop(\"checked\")", new ValueCallback<String>() {
+            webView.evaluateJavascript("$(\"input\").eq(3).prop(\"checked\")", new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String value) {
                     if(value.equals("true")) {
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
             });
             requestingAnswer = false;
             checkCorrectOfAnswer = true;
-            webView.evaluateJavascript("$(\"input\").get(10).click();", null);
+            webView.evaluateJavascript("$(\"input\").get(6).click();", null);
         }
     }
 
