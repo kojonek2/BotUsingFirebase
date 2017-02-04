@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.turn_off), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //finishAndRemoveTask();
                 finish();
                 System.exit(0);
             }
